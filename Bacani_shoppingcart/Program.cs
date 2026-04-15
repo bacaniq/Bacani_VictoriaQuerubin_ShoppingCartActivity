@@ -1,5 +1,6 @@
 using System;
 
+
 class Program
 {
     static void Main(string[] args)
@@ -15,34 +16,56 @@ class Program
         products[3] = new Product { ID = 4, Name = "Tablet", Price = 8000, RemainingStock = 5 };
         products[4] = new Product { ID = 5, Name = "Headset", Price = 1500, RemainingStock = 12 };
         products[5] = new Product { ID = 6, Name = "FLower", Price = 500, RemainingStock = 6 };
-        products[6] = new Product { ID = 7, Name = "Teddy Bear", Price = 800, RemainingStock = 15 };
+        products[6] = new Product { ID = 7, Name = "Teddy Bear", Price = 900, RemainingStock = 15 };
 
         bool running = true;
+
 
         //Start ng Loop
         while (running)
         {
             Console.WriteLine("\n===== MENU =====");
 
-            //display of product
             foreach (Product p in products)
             {
                 p.DisplayProduct(); //calling the method
             }
 
-            Console.Write("\nEnter Product ID: ");
+            Console.Write("\nEnter Product ID (0 = stop): ");
             int inputid;
 
-            //validation for inputting the id
-            if(!int.TryParse(Console.ReadLine(), out inputid))
+            if (!int.TryParse(Console.ReadLine(), out inputid))
             {
                 Console.WriteLine("Invalid input!");
                 continue;
             }
 
-        }
+            // EXIT
+            if (inputid == 0)
+            {
+                break;
+            }
 
+            // FIND PRODUCT
+            Product selectedProduct = null;
 
+            foreach (Product p in products)
+            {
+                if (p.ID == inputid)
+                {
+                    selectedProduct = p;
+                    break;
+                }
+            }
+
+            //If not existing ang product ID
+            if (selectedProduct == null)
+            {
+                Console.WriteLine("Invalid product!");
+                continue;
+            }
+            
+        } // end of loop
     }
 }
 
