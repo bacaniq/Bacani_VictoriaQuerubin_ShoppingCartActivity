@@ -1,5 +1,7 @@
 using System;
 
+
+//PROGRAM CLASS
 class Program
 {
     static void Main(string[] args)
@@ -21,6 +23,8 @@ class Program
         int cartCount = 0;
         Product[] cart = new Product[5];
         int[] quantities = new int[5];
+
+        double totalBill = 0;
 
         //Start ng Loop
         while (running)
@@ -45,7 +49,7 @@ class Program
             if (inputid == 0)
             {
                 Console.WriteLine("Exiting...");
-                return;
+                break;
             }
 
             // FIND PRODUCT
@@ -67,7 +71,7 @@ class Program
                 continue;
             }
 
-            if (selectedProduct.RemainingStock == 0)
+            if (!selectedProduct.HasEnoughStock(1)) //used the method
             {
                 Console.WriteLine("Out of stock!");
                 continue;
@@ -85,7 +89,7 @@ class Program
             }
 
             //checks if mas mataas ang quantity sa stock available
-            if (inputqty > selectedProduct.RemainingStock)
+            if (!selectedProduct.HasEnoughStock(inputqty))
             {
                 Console.WriteLine("Not enough stock available.");
                 continue;
@@ -128,7 +132,92 @@ class Program
                     Console.WriteLine("Added to cart!");
                 }
             }
+            string choice = "";
+
+            while (true)
+            {
+                Console.Write("\nAdd more items? (Y/N): ");
+                choice = Console.ReadLine().ToUpper();
+
+                if (choice == "Y" || choice == "N")
+                {
+                    break; // Valid input, exit this small loop
+                }
+
+                Console.WriteLine("Invalid input! Please type 'Y' for Yes or 'N' for No.");
+            }
+
+            if (choice == "N") running = false;
+
         } // end of loop
+
+
+        if (cartCount > 0) //if may laman ang cart then nag exit si user then pprint ang receipt
+        {
+            // RECEIPT AND TOTAL
+            Console.WriteLine("\n===== RECEIPT =====");
+            for (int i = 0; i < cartCount; i++)
+            {
+                double subtotal = cart[i].GetItemTotal(quantities[i]); //called the method
+                Console.WriteLine($"{cart[i].Name} x{quantities[i]} = {subtotal}");
+                totalBill += subtotal; // Calculate total 
+            }
+
+
+            //DISCOUNT
+            if (totalBill >= 5000)
+            {
+                double discount = totalBill * 0.10;
+                totalBill -= discount;
+                Console.WriteLine("Discount (10%): " + discount);
+                Console.WriteLine("Final Total: " + totalBill);
+            }
+            else
+            {
+                Console.WriteLine($"\nTotal Bill: {totalBill:N2}");
+            }
+
+            //UPDATED STOCK
+            Console.WriteLine("\n--- UPDATED STOCK ---");
+            foreach (Product p in products)
+            {
+                Console.WriteLine($"{p.Name} - {p.RemainingStock} left");
+
+            }
+
+            Console.WriteLine("\nThank you for shopping!! :3");
+        }
+        
+    } 
+}
+
+//PRODUCT CLASS
+class Product
+{
+
+    public int ID;
+    public string Name;
+    public double Price;
+    public int RemainingStock;
+
+    public void DisplayProduct()
+    {
+        Console.WriteLine($"{ID}. {Name} - ${Price} - (Stock: {RemainingStock})");
+
+    }
+    public double GetItemTotal(int quantity)
+    {
+        return Price * quantity;
+    }
+
+    public bool HasEnoughStock(int quantity)
+    {
+        return RemainingStock >= quantity;
+    }
+
+    public void DeductStock(int quantity)
+    {
+        RemainingStock -= quantity;
     }
 }
 
