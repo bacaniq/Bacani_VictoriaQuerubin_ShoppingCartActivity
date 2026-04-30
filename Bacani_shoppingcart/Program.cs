@@ -1,6 +1,5 @@
 using System;
 
-
 //PROGRAM CLASS
 class Program
 {
@@ -11,13 +10,13 @@ class Program
         //Array
         Product[] products = new Product[7];
 
-        products[0] = new Product { ID = 1, Name = "Candy", Price = 10, RemainingStock = 5 };
-        products[1] = new Product { ID = 2, Name = "Cookie", Price = 20, RemainingStock = 3 };
-        products[2] = new Product { ID = 3, Name = "Juice", Price = 15, RemainingStock = 4 };
-        products[3] = new Product { ID = 4, Name = "Tablet", Price = 8000, RemainingStock = 5 };
-        products[4] = new Product { ID = 5, Name = "Headset", Price = 1500, RemainingStock = 12 };
-        products[5] = new Product { ID = 6, Name = "FLower", Price = 500, RemainingStock = 6 };
-        products[6] = new Product { ID = 7, Name = "Teddy Bear", Price = 900, RemainingStock = 15 };
+        products[0] = new Product { ID = 1, Name = "Candy", Price = 10, RemainingStock = 5, Category = "Snacks" };
+        products[1] = new Product { ID = 2, Name = "Cookie", Price = 20, RemainingStock = 3, Category = "Snacks" };
+        products[2] = new Product { ID = 3, Name = "Juice", Price = 15, RemainingStock = 4, Category = "Beverages" };
+        products[3] = new Product { ID = 4, Name = "Tablet", Price = 8000, RemainingStock = 5, Category = "Electronics" };
+        products[4] = new Product { ID = 5, Name = "Headset", Price = 1500, RemainingStock = 12, Category = "Electronics" };
+        products[5] = new Product { ID = 6, Name = "Lego", Price = 500, RemainingStock = 6, Category = "Toys" };
+        products[6] = new Product { ID = 7, Name = "Teddy Bear", Price = 900, RemainingStock = 15, Category = "Toys" };
 
         bool running = true;
         int cartCount = 0;
@@ -31,12 +30,90 @@ class Program
         {
             Console.WriteLine("\n===== MENU =====");
 
-            foreach (Product p in products)
+            Console.WriteLine("1. Buy Product\n2. Cart Management\n3. View History\n4. Exit");
+            Console.Write("Select Option: ");
+            string choice = Console.ReadLine(); //user input
+
+            switch (choice) 
             {
-                p.DisplayProduct(); //calling the method
+                //BUY PRODUCT MENU
+                case "1":
+                    Console.WriteLine("\n--- BUY PRODUCTS ---");
+                    Console.WriteLine("1. View All Products\n2. Search Product by Name\n3. Filter by Category\n4. Back to Menu");
+                    Console.Write("Choice: ");
+                    string browseChoice = Console.ReadLine();// user input
+
+                    switch (browseChoice) 
+                    {
+                        case "1"://view all products
+                            foreach (Product p in products)
+                            {
+                                p.DisplayProduct(); //calling the method
+                            }
+                            break;
+   
+                        case "2":
+
+                            break;
+                        case "3": //filter by category
+                            bool filtering = true;
+                            while (filtering)
+                            {
+                                Console.WriteLine("\n== FILTER CATEGORY ==");
+                                Console.WriteLine("1. Snacks\n2. Beverages\n3. Electronics\n4. Toys");
+                                Console.Write("Enter category to filter (or type 'back' to exit): ");
+
+                                string searchCategory = Console.ReadLine().ToLower();
+
+                                if (searchCategory == "back")
+                                {
+                                    filtering = false;
+                                    break;
+                                }
+
+                                string selectedCategory = "";
+                                switch (searchCategory)
+                                {
+                                    case "1": selectedCategory = "Snacks"; break;
+                                    case "2": selectedCategory = "Beverages"; break;
+                                    case "3": selectedCategory = "Electronics"; break;
+                                    case "4": selectedCategory = "Toys"; break;
+                                    default:
+                                        Console.WriteLine("Invalid category! Try again.");
+                                        continue; // Babalik sa taas ng while loop
+                                }
+                                //display products
+                                Console.WriteLine($"\n--- {selectedCategory} Items ---");
+                                foreach (Product p in products)
+                                {
+                                    if (p.Category == selectedCategory)
+                                    {
+                                        p.DisplayProduct();
+                                    }
+                                }
+                            }
+
+                            break;
+                        case "4":
+                            break;
+                        default: Console.WriteLine("Invalid Input!"); 
+                            break;
+
+                    }
+                    break;
+                    case "2":
+                    break;
+                    case "3":
+
+                    break;
+                    case "4":
+                        Console.WriteLine("Returning to main menu...");
+                    break;
+
             }
 
-            Console.Write("\nEnter Product ID (0 = stop): ");
+            //add product
+            Console.Write("\nEnter Product ID: ");
             int inputid;
 
             if (!int.TryParse(Console.ReadLine(), out inputid))
@@ -132,14 +209,14 @@ class Program
                     Console.WriteLine("Added to cart!");
                 }
             }
-            string choice = "";
+            string choice2 = "";
 
             while (true)
             {
                 Console.Write("\nAdd more items? (Y/N): ");
-                choice = Console.ReadLine().ToUpper();
+                choice2 = Console.ReadLine().ToUpper();
 
-                if (choice == "Y" || choice == "N")
+                if (choice2 == "Y" || choice2 == "N")
                 {
                     break; // Valid input, exit this small loop
                 }
@@ -147,7 +224,7 @@ class Program
                 Console.WriteLine("Invalid input! Please type 'Y' for Yes or 'N' for No.");
             }
 
-            if (choice == "N") running = false;
+            if (choice2 == "N") running = false;
 
         } // end of loop
 
