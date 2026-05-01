@@ -28,6 +28,9 @@ class Program
         string[] history = new string[10];
         int receiptNumber = 0001;
 
+
+
+
         //Start ng Loop
         while (running)
         {
@@ -243,7 +246,7 @@ class Program
 
                                 case "5": // CHECKOUT
                                     double bill = 0;
-                                    Console.WriteLine("\n--- OFFICIAL RECEIPT ---");
+                                    Console.WriteLine("\n=== OFFICIAL RECEIPT ===");
                                     Console.WriteLine($"\nReceipt No: {receiptNumber:D4}\nDate: {DateTime.Now}");
                                     for (int i = 0; i < cartCount; i++)
                                     {
@@ -307,22 +310,38 @@ class Program
                     }
                     break;// break for case 2
 
-                case "3":// VIEW HISTORY
-
+                //VIEW HISTORY
+                case "3":
+                    Console.WriteLine("\n===== ORDER HISTORY =====");
+                    bool hasHistory = false;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (history[i] != null) // Check kung may naka-save na string
+                        {
+                            Console.WriteLine(history[i]);
+                            hasHistory = true;
+                        }
+                    }
+                    if (!hasHistory) Console.WriteLine("No records found.");
                     break;
 
-                case "4":// EXIT
-                    
-                    break;
+                //EXIT
+                case "4":
+                    Console.WriteLine("Goodbye! :3");
+                    Console.WriteLine("\nPress any key to close...");
+                    Console.ReadKey();
+                    running = false;
+                    return;
 
                 default:
                     Console.WriteLine("Invalid Input!");
                     break;
             }
 
-            
         }
+
     }
+
 
     //ADD PRODUCT METHOD
     static void AddToCart(Product[] products, Product[] cart, int[] quantities, ref int cartCount)
