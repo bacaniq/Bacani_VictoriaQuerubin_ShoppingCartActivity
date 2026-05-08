@@ -7,10 +7,11 @@ class Product
     public string Name;
     public double Price;
     public int RemainingStock;
+    public string Category;
 
     public void DisplayProduct()
     {
-        Console.WriteLine($"{ID}. {Name} - ${Price} - (Stock: {RemainingStock})");
+        Console.WriteLine($"{ID}. {Name} - ${Price} - (Stock: {RemainingStock}) - Category: {Category}");
 
     }
     public double GetItemTotal(int quantity)
